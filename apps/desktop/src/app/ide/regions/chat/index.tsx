@@ -34,7 +34,8 @@ export function ChatRegion() {
   const [creating, setCreating] = useState(false)
   const [recent, setRecent] = useState<SessionInfo[]>([])
 
-  const effective = tabs.find(tile => tile.storedSessionId === active)?.storedSessionId ?? tabs[0]?.storedSessionId ?? null
+  const effective =
+    tabs.find(tile => tile.storedSessionId === active)?.storedSessionId ?? tabs[0]?.storedSessionId ?? null
 
   // Keep the pointer on a living tab (its tab was closed, or a profile swap
   // replaced the set).
@@ -89,10 +90,7 @@ export function ChatRegion() {
   }
 
   return (
-    <section
-      aria-label={t.ide.chatTitle}
-      className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-bg-chrome)"
-    >
+    <section aria-label={t.ide.chatTitle} className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-bg-chrome)">
       <header
         aria-label={t.ide.chatTabsLabel}
         className="flex h-9 shrink-0 items-stretch gap-0.5 overflow-x-auto border-b border-(--ui-stroke-tertiary) px-1 pt-1"

@@ -48,7 +48,11 @@ export function ExplorerRegion() {
       </header>
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {!workspaceRoot ? (
-          <EmptyState className="min-h-0 pt-10" description={t.ide.explorerEmptyBody} title={t.ide.explorerEmptyTitle} />
+          <EmptyState
+            className="min-h-0 pt-10"
+            description={t.ide.explorerEmptyBody}
+            title={t.ide.explorerEmptyTitle}
+          />
         ) : tree.rootError ? (
           <div className="px-3 pt-4 text-xs leading-relaxed text-muted-foreground">
             {t.ide.explorerUnreadable(tree.rootError)}

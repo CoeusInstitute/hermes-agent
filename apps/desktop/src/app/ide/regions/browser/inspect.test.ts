@@ -4,7 +4,10 @@ import { formatPickedElement, MAX_PICKED_HTML, parsePickedPayload } from './insp
 
 describe('formatPickedElement', () => {
   it('builds the chat payload with the selector, html fence, and page url', () => {
-    const text = formatPickedElement({ html: '<button id="save">Save</button>', selector: 'button#save' }, 'https://app.test/x')
+    const text = formatPickedElement(
+      { html: '<button id="save">Save</button>', selector: 'button#save' },
+      'https://app.test/x'
+    )
 
     expect(text).toContain('Element from https://app.test/x')
     expect(text).toContain('Selector: button#save')

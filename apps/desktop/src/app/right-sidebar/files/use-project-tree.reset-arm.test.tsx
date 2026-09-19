@@ -42,7 +42,12 @@ function Probe({ root }: { root: string }) {
 
   return (
     <div data-testid="probe">
-      {JSON.stringify({ cwd: tree.effectiveCwd, data: tree.data.length, error: tree.rootError, loading: tree.rootLoading })}
+      {JSON.stringify({
+        cwd: tree.effectiveCwd,
+        data: tree.data.length,
+        error: tree.rootError,
+        loading: tree.rootLoading
+      })}
     </div>
   )
 }

@@ -83,7 +83,12 @@ describe('rememberIdeSessionRows', () => {
 
     rememberIdeSessionRows([{ id: 'old' } as never, { id: 'new' } as never])
 
-    expect($sessions.get().map(session => session.id).sort()).toEqual(['new', 'old'])
+    expect(
+      $sessions
+        .get()
+        .map(session => session.id)
+        .sort()
+    ).toEqual(['new', 'old'])
   })
 
   it('no-ops on an empty list', () => {

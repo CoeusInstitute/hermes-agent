@@ -88,7 +88,8 @@ export const PICKER_SCRIPT = `new Promise(function (resolve) {
 
 /** The composer text an inspected element contributes. */
 export function formatPickedElement(picked: PickedElement, pageUrl: string): string {
-  const html = picked.html.length > MAX_PICKED_HTML ? `${picked.html.slice(0, MAX_PICKED_HTML)}\n… (truncated)` : picked.html
+  const html =
+    picked.html.length > MAX_PICKED_HTML ? `${picked.html.slice(0, MAX_PICKED_HTML)}\n… (truncated)` : picked.html
 
   return `Element from ${pageUrl}\n\nSelector: ${picked.selector}\n\n\`\`\`html\n${html}\n\`\`\``
 }

@@ -259,7 +259,7 @@ export const ar = defineLocale({
     resetHudLayout: 'إعادة تعيين حجم HUD وموضعه',
     layoutEditor: 'محرر التخطيط',
     layoutEditorTitle: modifier => `محرر التخطيط — انقر مع ${modifier} لإعادة ضبط التخطيط`,
-    openIde: 'فتح Hermes IDE',
+    openIde: 'فتح Hermes IDE'
   },
   keybinds: {
     title: 'اختصارات لوحة المفاتيح',
@@ -3116,7 +3116,8 @@ export const ar = defineLocale({
     sudoSendFailed: 'فشل إرسال كلمة مرور sudo',
     secretSendFailed: 'فشل إرسال السر',
     sudoTitle: 'مطلوب sudo',
-    sudoDesc: 'راجع الأمر قبل إدخال كلمة مرور sudo. تُرسل كلمة المرور إلى الوكيل الذي ينفّذه وتُحفظ مؤقتًا لهذه الجلسة.',
+    sudoDesc:
+      'راجع الأمر قبل إدخال كلمة مرور sudo. تُرسل كلمة المرور إلى الوكيل الذي ينفّذه وتُحفظ مؤقتًا لهذه الجلسة.',
     sudoCommandUnavailable: 'لم يقدّم هذا الوكيل الأمر. ألغِ الطلب إذا لم تتمكن من التحقق منه في المحادثة.',
     sudoPlaceholder: 'كلمة المرور',
     secretTitle: 'مطلوب سر',
@@ -3356,6 +3357,6 @@ export const ar = defineLocale({
     browserNewTab: 'علامة تبويب جديدة',
     browserInspect: 'فحص العنصر',
     browserAddPage: 'إضافة الصفحة إلى المحادثة',
-    browserInspectFailed: 'تعذّر فحص هذه الصفحة',
-  },
+    browserInspectFailed: 'تعذّر فحص هذه الصفحة'
+  }
 })

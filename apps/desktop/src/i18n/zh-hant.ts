@@ -281,7 +281,7 @@ export const zhHant = defineLocale({
     openSettings: '開啟設定',
     openStarmap: '開啟記憶圖譜',
     resetHudLayout: '重設 HUD 大小和位置',
-    openIde: '開啟 Hermes IDE',
+    openIde: '開啟 Hermes IDE'
   },
 
   language: {
@@ -1445,8 +1445,10 @@ export const zhHant = defineLocale({
         failedSelect: backend => `選擇 ${backend} 失敗`,
         needsSetupHint: '此後端已選取但尚未完成設定——在設定完成前命令將會失敗。',
         needsSetupConfirmTitle: backend => `仍要選擇 ${backend} 嗎？`,
-        needsSetupConfirmDescription: detail => `${detail} 此變更生效後啟動的工作階段在設定完成前將沒有終端或檔案工具。`,
-        needsSetupConfirmDescriptionGeneric: '此後端尚未完成設定。此變更生效後啟動的工作階段在設定完成前將沒有終端或檔案工具。',
+        needsSetupConfirmDescription: detail =>
+          `${detail} 此變更生效後啟動的工作階段在設定完成前將沒有終端或檔案工具。`,
+        needsSetupConfirmDescriptionGeneric:
+          '此後端尚未完成設定。此變更生效後啟動的工作階段在設定完成前將沒有終端或檔案工具。',
         needsSetupConfirmAction: '仍然選擇'
       },
       browserRealProfile: {
@@ -3696,6 +3698,6 @@ export const zhHant = defineLocale({
     browserNewTab: '新增瀏覽器分頁',
     browserInspect: '檢查元素',
     browserAddPage: '將頁面加入對話',
-    browserInspectFailed: '無法檢查此頁面',
-  },
+    browserInspectFailed: '無法檢查此頁面'
+  }
 })

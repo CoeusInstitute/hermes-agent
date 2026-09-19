@@ -1217,7 +1217,8 @@ function getTitleBarOverlayOptions() {
     darwinMajor: DARWIN_MAJOR,
     titlebarHeight: TITLEBAR_HEIGHT,
     color: TITLEBAR_OVERLAY_COLOR,
-    foreground: rendererTitleBarTheme && isHexColor(rendererTitleBarTheme.foreground) ? rendererTitleBarTheme.foreground : null,
+    foreground:
+      rendererTitleBarTheme && isHexColor(rendererTitleBarTheme.foreground) ? rendererTitleBarTheme.foreground : null,
     dark: nativeTheme.shouldUseDarkColors
   })
 }
@@ -3563,9 +3564,7 @@ function repairMacUpdaterHelper(updater) {
 function venvHermesShimPath(updateRoot) {
   const venvDir = resolveVenvDir(updateRoot)
 
-  return IS_WINDOWS
-    ? path.join(venvDir, 'Scripts', 'hermes.exe')
-    : path.join(venvDir, 'bin', 'hermes')
+  return IS_WINDOWS ? path.join(venvDir, 'Scripts', 'hermes.exe') : path.join(venvDir, 'bin', 'hermes')
 }
 
 // Best-effort lock probe mirroring the Rust updater's is_locked(): a running
@@ -8490,14 +8489,15 @@ function resolvePortalBaseUrl() {
   return String(raw).trim().replace(/\/+$/, '')
 }
 
-const { hasLivePortalSession, hasPortalAccessToken, renewPortalAccessSilently, openPortalLoginWindow } = createPortalSession({
-  isReady: () => app.isReady(),
-  getOauthSession,
-  resolvePortalBaseUrl,
-  warmOauthCookieStore,
-  createWindow: options => new BrowserWindow(options),
-  rememberLog
-})
+const { hasLivePortalSession, hasPortalAccessToken, renewPortalAccessSilently, openPortalLoginWindow } =
+  createPortalSession({
+    isReady: () => app.isReady(),
+    getOauthSession,
+    resolvePortalBaseUrl,
+    warmOauthCookieStore,
+    createWindow: options => new BrowserWindow(options),
+    rememberLog
+  })
 
 // Discover the hosted (Hermes Cloud) agents the signed-in user can see. Calls
 // the NAS trimmed-summary endpoint over the partition-bound net, so the portal
@@ -8530,10 +8530,13 @@ async function discoverCloudAgents(org?: string) {
   const fetchAgents = () =>
     discoverWithTeamFallback(
       selectedOrg =>
-        fetchJsonViaOauthSession(`${portalBaseUrl}/api/agents${selectedOrg ? `?org=${encodeURIComponent(selectedOrg)}` : ''}`, {
-          method: 'GET',
-          timeoutMs: 15_000
-        }),
+        fetchJsonViaOauthSession(
+          `${portalBaseUrl}/api/agents${selectedOrg ? `?org=${encodeURIComponent(selectedOrg)}` : ''}`,
+          {
+            method: 'GET',
+            timeoutMs: 15_000
+          }
+        ),
       org
     )
 
@@ -12227,9 +12230,7 @@ function startPoolIdleReaper() {
       if (now - (entry.lastActiveAt || 0) > poolIdleMs()) {
         // Remote descriptors hold no child/slot. Local children require the
         // same admission authority as foreground and LRU reclamation.
-        const retiring = entry.process
-          ? poolRetirer.retireIdle(profile, poolIdleMs())
-          : stopPoolBackend(profile)
+        const retiring = entry.process ? poolRetirer.retireIdle(profile, poolIdleMs()) : stopPoolBackend(profile)
 
         void retiring.catch(error => rememberLog(`Pool idle retirement failed: ${String(error)}`))
       }
@@ -15069,7 +15070,10 @@ ipcMain.handle('hermes:connection:for', async (_event, payload) => {
   const id = String(connectionId || '').trim() || registry.primary
   const spawnPriority = spawnPriorityFrom(priority)
 
-  return connectDesktopProfileRoute({ connectionId: id, profile: String(profile ?? '').trim() || 'default' }, spawnPriority)
+  return connectDesktopProfileRoute(
+    { connectionId: id, profile: String(profile ?? '').trim() || 'default' },
+    spawnPriority
+  )
 })
 
 const windowConnectionRoutes = new WindowConnectionRouteRegistry()
