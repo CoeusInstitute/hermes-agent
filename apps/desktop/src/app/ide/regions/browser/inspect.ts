@@ -92,7 +92,23 @@ export interface PickedElementRef {
   value: string
 }
 
-const MAX_LABEL = 60
+const MAX_LABEL = 28
+
+/** The chip's visible label: the selector's last two segments ("svg > path"),
+ *  so an inspected element reads as a compact mention instead of a full
+ *  `>`-laden path. The complete selector stays in the payload (and the hover
+ *  title), and `refChipLabel` derives the same label wherever the reference is
+ *  shown — composer, sent bubble, transcript. */
+function selectorLabel(selector: string) {
+  const segments = selector
+    .split('>')
+    .map(part => part.trim())
+    .filter(Boolean)
+
+  const tail = segments.slice(-2).join(' > ') || 'element'
+
+  return tail.length > MAX_LABEL ? `${tail.slice(0, MAX_LABEL - 1)}…` : tail
+}
 
 /**
  * The inline reference an inspected element contributes to the composer: a
@@ -109,7 +125,7 @@ export function pickedElementRef(picked: PickedElement, pageUrl: string): Picked
   const raw = picked.html.length > MAX_PICKED_HTML ? `${picked.html.slice(0, MAX_PICKED_HTML)} … (truncated)` : picked.html
   const html = raw.replace(/\s+/g, ' ').replace(/`/g, 'ʹ')
   const selector = picked.selector.trim() || 'element'
-  const label = selector.length > MAX_LABEL ? `${selector.slice(0, MAX_LABEL - 3)}…` : selector
+  const label = selectorLabel(selector)
   const value = [selector, pageUrl.trim(), html].filter(Boolean).join(' :: ')
 
   return { kind: 'element', label, value }

@@ -81,11 +81,16 @@ export function BrowserRegion() {
       className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-chat-surface-background)"
     >
       <header
-        aria-label={t.ide.browserTabsLabel}
-        className="flex h-9 shrink-0 items-stretch gap-0.5 overflow-x-auto border-b border-(--ui-stroke-tertiary) px-1 pt-1"
-        role="tablist"
+        className="flex h-9 shrink-0 items-stretch gap-0.5 border-b border-(--ui-stroke-tertiary) px-1 pt-1"
       >
-        {tabs.map(tab => {
+        {/* Tabs scroll inside their own region; the strip's controls sit right
+            after them and stay visible while the tabs scroll. */}
+        <div
+          aria-label={t.ide.browserTabsLabel}
+          className="flex min-w-0 shrink items-stretch gap-0.5 overflow-x-auto"
+          role="tablist"
+        >
+          {tabs.map(tab => {
           const isActive = tab.id === active?.id
 
           return (
@@ -121,10 +126,12 @@ export function BrowserRegion() {
             </div>
           )
         })}
+        </div>
+        <span className="my-auto ml-1 flex shrink-0 items-center gap-0.5">
         <Tip label={t.ide.browserNewTab}>
           <Button
             aria-label={t.ide.browserNewTab}
-            className="my-auto ml-1 shrink-0"
+            className="my-auto"
             onClick={() => newBrowserTab()}
             size="icon-xs"
             type="button"
@@ -134,7 +141,7 @@ export function BrowserRegion() {
           </Button>
         </Tip>
         {active && (
-          <span className="my-auto ml-1 flex shrink-0 items-center gap-0.5">
+          <>
             <Tip label={t.ide.browserInspect}>
               <Button
                 aria-label={t.ide.browserInspect}
@@ -160,8 +167,9 @@ export function BrowserRegion() {
                 <Codicon name="link" size={13} />
               </Button>
             </Tip>
-          </span>
+          </>
         )}
+        </span>
       </header>
       <div className="relative min-h-0 flex-1 overflow-hidden" ref={regionRef}>
         {active ? (

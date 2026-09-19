@@ -139,4 +139,22 @@ describe('BrowserRegion', () => {
 
     expect(h.closeTab).toHaveBeenCalledWith('url:1')
   })
+
+  it('keeps the strip controls outside the scrolling tab region', () => {
+    $previewTabs.set([exampleTab as never])
+    $rightRailActiveTabId.set('url:1' as never)
+
+    renderRegion()
+
+    const tablist = screen.getByRole('tablist', { name: 'Browser tabs' })
+
+    // The + / inspect / add-page controls must not live inside the region that
+    // scrolls with the tabs, or resizing the pane pushes them out of reach.
+    expect(tablist.contains(screen.getByLabelText('New browser tab'))).toBe(false)
+    expect(tablist.contains(screen.getByLabelText('Inspect element'))).toBe(false)
+    expect(tablist.contains(screen.getByLabelText('Add page to chat'))).toBe(false)
+
+    // And the preview pane reports its own context-menu affordance separately.
+    expect(tablist.querySelectorAll('[role="tab"]').length).toBe(1)
+  })
 })

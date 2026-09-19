@@ -94,11 +94,16 @@ export function ChatRegion() {
       className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-bg-chrome)"
     >
       <header
-        aria-label={t.ide.chatTabsLabel}
-        className="flex h-9 shrink-0 items-stretch gap-0.5 overflow-x-auto border-b border-(--ui-stroke-tertiary) px-1 pt-1"
-        role="tablist"
+        className="flex h-9 shrink-0 items-stretch gap-0.5 border-b border-(--ui-stroke-tertiary) px-1 pt-1"
       >
-        {tabs.map(tile => {
+        {/* Tabs scroll inside their own region; the strip's controls sit right
+            after them and stay visible while the tabs scroll. */}
+        <div
+          aria-label={t.ide.chatTabsLabel}
+          className="flex min-w-0 shrink items-stretch gap-0.5 overflow-x-auto"
+          role="tablist"
+        >
+          {tabs.map(tile => {
           const row = tileStoredRow(tile.storedSessionId)
           const title = row ? sessionTitle(row) : NEW_SESSION_TITLE
           const isActive = tile.storedSessionId === effective
@@ -135,10 +140,12 @@ export function ChatRegion() {
             </div>
           )
         })}
+        </div>
+        <span className="my-auto ml-1 flex shrink-0 items-center gap-0.5">
         <Tip label={t.ide.chatNew}>
           <Button
             aria-label={t.ide.chatNew}
-            className="my-auto ml-1 shrink-0"
+            className="my-auto"
             disabled={creating}
             onClick={() => void startSession()}
             size="icon-xs"
@@ -148,6 +155,7 @@ export function ChatRegion() {
             {creating ? <Loader /> : <Codicon name="add" size={13} />}
           </Button>
         </Tip>
+        </span>
       </header>
 
       <div className="min-h-0 flex-1 overflow-hidden">

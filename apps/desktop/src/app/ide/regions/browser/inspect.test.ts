@@ -28,8 +28,18 @@ describe('pickedElementRef', () => {
 
     expect(ref.value).toContain('… (truncated)')
     expect(ref.value.length).toBeLessThan(MAX_PICKED_HTML + 200)
-    expect(ref.label.length).toBeLessThanOrEqual(60)
+    expect(ref.label.length).toBeLessThanOrEqual(28)
     expect(ref.label.endsWith('…')).toBe(true)
+  })
+
+  it('labels the chip with the selector\'s last two segments', () => {
+    const ref = pickedElementRef(
+      { html: '<path d="M0 0"/>', selector: 'div#sI1XGe > div:nth-of-type(1) > svg > path' },
+      'https://www.google.com/'
+    )
+
+    expect(ref.label).toBe('svg > path')
+    expect(ref.value.startsWith('div#sI1XGe > div:nth-of-type(1) > svg > path :: ')).toBe(true)
   })
 
   it('falls back to a generic label for a blank selector', () => {
