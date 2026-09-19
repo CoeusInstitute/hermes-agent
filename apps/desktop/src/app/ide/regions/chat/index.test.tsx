@@ -10,6 +10,7 @@ const h = vi.hoisted(() => ({
   create: vi.fn(),
   list: vi.fn(),
   remember: vi.fn(),
+  rememberTitle: vi.fn(),
   request: vi.fn()
 }))
 
@@ -33,9 +34,11 @@ vi.mock('@/app/gateway/hooks/use-gateway-request', () => ({
 vi.mock('./sessions', () => ({
   createIdeSession: (...args: unknown[]) => h.create(...args),
   listIdeSessions: (...args: unknown[]) => h.list(...args),
-  rememberIdeSessionRows: (...args: unknown[]) => h.remember(...args)
+  rememberIdeSessionRows: (...args: unknown[]) => h.remember(...args),
+  rememberIdeSessionTitle: (...args: unknown[]) => h.rememberTitle(...args)
 }))
 
+import { $gateway } from '@/store/gateway'
 import { $gatewayState } from '@/store/session'
 import { $sessionTiles } from '@/store/session-states'
 import type { SessionTile } from '@/store/session-states'
@@ -59,7 +62,9 @@ beforeEach(() => {
   h.create.mockReset().mockResolvedValue('s-new')
   h.list.mockReset().mockResolvedValue([])
   h.remember.mockReset()
+  h.rememberTitle.mockReset()
   h.request.mockReset()
+  $gateway.set(null)
   $sessionTiles.set([])
   $ideActiveChat.set(null)
   $gatewayState.set('open')
@@ -134,5 +139,46 @@ describe('ChatRegion', () => {
 
     expect($ideActiveChat.get()).toBe('s1')
     expect(screen.getByTestId('tile-pane').textContent).toBe('s1')
+  })
+
+  it('titles an open tab from a live session.title push', () => {
+    const listeners: Array<(event: unknown) => void> = []
+
+    $gateway.set({
+      onEvent: (handler: (event: unknown) => void) => {
+        listeners.push(handler)
+
+        return () => undefined
+      }
+    } as never)
+    $sessionTiles.set([tile('s1')])
+
+    renderRegion()
+
+    expect(listeners).toHaveLength(1)
+
+    listeners[0]({ type: 'session.title', payload: { session_id: 's1', title: 'Auto title' } })
+
+    expect(h.rememberTitle).toHaveBeenCalledWith('s1', 'Auto title')
+  })
+
+  it('ignores title pushes for sessions without an open tab', () => {
+    const listeners: Array<(event: unknown) => void> = []
+
+    $gateway.set({
+      onEvent: (handler: (event: unknown) => void) => {
+        listeners.push(handler)
+
+        return () => undefined
+      }
+    } as never)
+    $sessionTiles.set([tile('s1')])
+
+    renderRegion()
+
+    listeners[0]({ type: 'session.title', payload: { session_id: 'other', title: 'X' } })
+    listeners[0]({ type: 'session.title', payload: { session_id: 's1', title: '   ' } })
+
+    expect(h.rememberTitle).not.toHaveBeenCalled()
   })
 })

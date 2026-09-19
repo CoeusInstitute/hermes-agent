@@ -19,7 +19,7 @@ import { $sessions } from '@/store/session'
 
 import { $ideWorkspaceRoot } from '../../state'
 
-import { createIdeSession, listIdeSessions, rememberIdeSessionRows } from './sessions'
+import { createIdeSession, listIdeSessions, rememberIdeSessionRows, rememberIdeSessionTitle } from './sessions'
 import { $ideActiveChat } from './store'
 
 beforeEach(() => {
@@ -92,5 +92,36 @@ describe('rememberIdeSessionRows', () => {
     rememberIdeSessionRows([])
 
     expect($sessions.get().map(session => session.id)).toEqual(['old'])
+  })
+})
+
+describe('rememberIdeSessionTitle', () => {
+  it('inserts a titled ide row when the session is unknown', () => {
+    rememberIdeSessionTitle('s1', 'Fresh title')
+
+    const rows = $sessions.get()
+
+    expect(rows).toHaveLength(1)
+    expect(rows[0].id).toBe('s1')
+    expect(rows[0].title).toBe('Fresh title')
+    expect(rows[0].source).toBe('ide')
+  })
+
+  it('retitles an existing row in place', () => {
+    $sessions.set([{ id: 's1', title: 'New session' } as never])
+
+    rememberIdeSessionTitle('s1', 'Renamed by titler')
+
+    expect($sessions.get()[0].title).toBe('Renamed by titler')
+  })
+
+  it('no-ops (identity preserved) when the title is unchanged', () => {
+    const row = { id: 's1', title: 'Same' } as never
+
+    $sessions.set([row])
+
+    rememberIdeSessionTitle('s1', 'Same')
+
+    expect($sessions.get()[0]).toBe(row)
   })
 })

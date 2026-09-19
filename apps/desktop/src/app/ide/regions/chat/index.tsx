@@ -8,15 +8,17 @@ import { Codicon } from '@/components/ui/codicon'
 import { EmptyState } from '@/components/ui/empty-state'
 import { Loader } from '@/components/ui/loader'
 import { Tip } from '@/components/ui/tooltip'
+import type { HermesGateway } from '@/hermes'
 import { useI18n } from '@/i18n'
 import { NEW_SESSION_TITLE, sessionTitle } from '@/lib/chat-runtime'
 import { cn } from '@/lib/utils'
+import { $gateway } from '@/store/gateway'
 import { notifyError } from '@/store/notifications'
-import { $gatewayState } from '@/store/session'
+import { $gatewayState, $sessions } from '@/store/session'
 import { $sessionTiles, openSessionTile } from '@/store/session-states'
 import type { SessionInfo } from '@/types/hermes'
 
-import { createIdeSession, listIdeSessions, rememberIdeSessionRows } from './sessions'
+import { createIdeSession, listIdeSessions, rememberIdeSessionRows, rememberIdeSessionTitle } from './sessions'
 import { $ideActiveChat, activateIdeChat } from './store'
 
 /**
@@ -31,6 +33,10 @@ export function ChatRegion() {
   const tabs = useStore($sessionTiles)
   const active = useStore($ideActiveChat)
   const gatewayState = useStore($gatewayState)
+  const gateway = useStore($gateway) as HermesGateway | null
+  // Live rows: the tab strip reads titles from this store, so subscribing is
+  // what makes a title push repaint the tab.
+  const sessionRows = useStore($sessions)
   const [creating, setCreating] = useState(false)
   const [recent, setRecent] = useState<SessionInfo[]>([])
 
@@ -66,6 +72,36 @@ export function ChatRegion() {
       alive = false
     }
   }, [gatewayState])
+
+  // Live auto-titles: the shared session.title handler only maps rows its
+  // store already has, and ide rows never ride the primary lists — upsert the
+  // titled row so an open tab stops reading "New session" after its first
+  // turn titles the session backend-side.
+  useEffect(() => {
+    if (!gateway || gatewayState !== 'open') {
+      return
+    }
+
+    return gateway.onEvent(event => {
+      if (event.type !== 'session.title') {
+        return
+      }
+
+      const payload = event.payload as { session_id?: unknown; title?: unknown } | undefined
+      const storedId = typeof payload?.session_id === 'string' ? payload.session_id : ''
+      const title = typeof payload?.title === 'string' ? payload.title.trim() : ''
+
+      if (!storedId || !title) {
+        return
+      }
+
+      if (!$sessionTiles.get().some(entry => entry.storedSessionId === storedId)) {
+        return
+      }
+
+      rememberIdeSessionTitle(storedId, title)
+    })
+  }, [gateway, gatewayState])
 
   const startSession = useCallback(async () => {
     setCreating(true)
@@ -104,7 +140,10 @@ export function ChatRegion() {
           role="tablist"
         >
           {tabs.map(tile => {
-          const row = tileStoredRow(tile.storedSessionId)
+          const row =
+            sessionRows.find(entry => entry.id === tile.storedSessionId) ??
+            tileStoredRow(tile.storedSessionId)
+
           const title = row ? sessionTitle(row) : NEW_SESSION_TITLE
           const isActive = tile.storedSessionId === effective
 

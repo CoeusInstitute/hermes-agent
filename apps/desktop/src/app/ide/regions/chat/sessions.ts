@@ -49,6 +49,46 @@ export function rememberIdeSessionRows(rows: SessionInfo[]) {
 }
 
 /**
+ * Upsert one live auto-title (a `session.title` push) for a session this
+ * window owns. The shared title handler only maps rows its store already
+ * carries — ide rows never arrive via the primary lists — so without this
+ * upsert a brand-new IDE tab would read "New session" forever after its
+ * first turn titles the session backend-side.
+ */
+export function rememberIdeSessionTitle(storedId: string, title: string): void {
+  const rows = $sessions.get()
+  const existing = rows.find(row => row.id === storedId)
+
+  if (existing) {
+    if ((existing.title ?? '').trim() === title) {
+      return
+    }
+
+    $sessions.set(rows.map(row => (row.id === storedId ? { ...row, title } : row)))
+
+    return
+  }
+
+  rememberIdeSessionRows([
+    {
+      ended_at: null,
+      id: storedId,
+      input_tokens: 0,
+      is_active: true,
+      last_active: Math.floor(Date.now() / 1000),
+      message_count: 0,
+      model: null,
+      output_tokens: 0,
+      preview: null,
+      source: IDE_SESSION_SOURCE,
+      started_at: Math.floor(Date.now() / 1000),
+      title,
+      tool_call_count: 0
+    }
+  ])
+}
+
+/**
  * Create a new IDE session (source='ide'), open it as a tab, and activate it.
  * Returns the stored session id, or null when the gateway did not return one.
  */
