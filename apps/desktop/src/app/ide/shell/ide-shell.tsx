@@ -33,6 +33,7 @@ export function IdeShell() {
   const layout = useStore($ideLayout)
   const workspaceRoot = useStore($ideWorkspaceRoot)
   const editor = useStore($ideEditor)
+  const editorOpen = editor.openPaths.length > 0
 
   return (
     <div
@@ -79,7 +80,7 @@ export function IdeShell() {
           {/* The editor column exists only while a file is open: an empty
               frame is dead weight above the browser, and closing the last tab
               (or never opening one) should give its space back. */}
-          {editor.openPaths.length > 0 && (
+          {editorOpen && (
             <div className="flex min-h-0 min-w-0 flex-1">
               <EditorRegion />
             </div>
@@ -87,14 +88,22 @@ export function IdeShell() {
 
           {layout.browserOpen && (
             <>
-              <IdeSplitHandle
-                axis="y"
-                invert
-                label={t.ide.resizeBrowser}
-                setSize={setIdeBrowserHeight}
-                size={() => $ideLayout.get().browserHeight}
-              />
-              <div className="min-h-0 shrink-0" style={{ height: layout.browserHeight }}>
+              {/* With no editor to stack against, the browser owns the whole
+                  column: it is flex-1 and the resize handle has nothing to
+                  size against, so both change shape together. */}
+              {editorOpen && (
+                <IdeSplitHandle
+                  axis="y"
+                  invert
+                  label={t.ide.resizeBrowser}
+                  setSize={setIdeBrowserHeight}
+                  size={() => $ideLayout.get().browserHeight}
+                />
+              )}
+              <div
+                className={editorOpen ? 'min-h-0 shrink-0' : 'min-h-0 flex-1'}
+                style={editorOpen ? { height: layout.browserHeight } : undefined}
+              >
                 <BrowserRegion />
               </div>
             </>

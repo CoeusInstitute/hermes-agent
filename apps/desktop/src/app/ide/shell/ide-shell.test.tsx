@@ -51,6 +51,9 @@ describe('IdeShell', () => {
     const view = renderShell()
 
     expect(region('Editor')).toBeTruthy()
+    // With an editor above it the browser is docked: it has a height to be
+    // resized against, so the split handle exists.
+    expect(screen.getByRole('separator', { name: 'Resize browser' })).toBeTruthy()
 
     closeIdeFile('D:/scratch/hello.txt')
     view.rerender(
@@ -60,6 +63,16 @@ describe('IdeShell', () => {
     )
 
     expect(region('Editor')).toBeNull()
+  })
+
+  it('gives the browser the whole column while no editor is open', () => {
+    renderShell()
+
+    // No editor: nothing to size the browser against, so the handle is gone
+    // and the region stretches (asserted structurally; geometry in the live
+    // probe).
+    expect(region('Browser')).toBeTruthy()
+    expect(screen.queryByRole('separator', { name: 'Resize browser' })).toBeNull()
   })
 
   it('shows the seeded workspace (basename) and keeps the full path in the status bar', () => {

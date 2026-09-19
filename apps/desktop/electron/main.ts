@@ -13554,7 +13554,7 @@ function notifyBrowserPopoutClosed(tabId) {
   }
 }
 
-function spawnBrowserWindow(tabId) {
+function spawnBrowserWindow(tabId, scope) {
   const icon = getAppIconPath()
 
   const win = new BrowserWindow({
@@ -13605,7 +13605,8 @@ function spawnBrowserWindow(tabId) {
     win,
     buildBrowserWindowUrl(tabId, {
       devServer: DEV_SERVER,
-      rendererIndexPath: DEV_SERVER ? undefined : resolveRendererIndex()
+      rendererIndexPath: DEV_SERVER ? undefined : resolveRendererIndex(),
+      scope
     }),
     'Browser window'
   )
@@ -13613,8 +13614,8 @@ function spawnBrowserWindow(tabId) {
   return win
 }
 
-function createBrowserWindow(tabId) {
-  return browserWindows.openOrFocus(tabId, () => spawnBrowserWindow(tabId))
+function createBrowserWindow(tabId, scope) {
+  return browserWindows.openOrFocus(tabId, () => spawnBrowserWindow(tabId, scope))
 }
 
 // Additional full "instance" windows — peers of the primary that render the
@@ -15258,7 +15259,20 @@ ipcMain.handle('hermes:window:openBrowser', async (_event, tabId) => {
     return { ok: false, error: 'invalid-tab-id' }
   }
 
-  createBrowserWindow(tabId.trim())
+  // A pop-out taken from the IDE must read the IDE's tab store, or it finds no
+  // tab and renders blank — the source window's `?win=` kind names the scope.
+  let scope
+
+  try {
+    const source = BrowserWindow.fromWebContents(_event.sender)
+    const kind = source && !source.isDestroyed() ? new URLSearchParams(new URL(source.webContents.getURL()).search).get('win') : null
+
+    scope = kind === 'ide' ? 'ide' : undefined
+  } catch {
+    scope = undefined
+  }
+
+  createBrowserWindow(tabId.trim(), scope)
 
   return { ok: true }
 })

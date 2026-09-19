@@ -107,6 +107,32 @@ export function windowBrowserTabId(): null | string {
   }
 }
 
+export const PREVIEW_TABS_GLOBAL_KEY = 'hermes.desktop.previewTabs.v2'
+export const PREVIEW_TABS_IDE_KEY = 'hermes.desktop.previewTabs.ide.v1'
+
+/**
+ * The persisted store key for the in-app Browser's tabs.
+ *
+ * The IDE keeps its tabs under its own key (they are its tabs, not the
+ * primary window's), and its popped-out Browser windows share that same key —
+ * a pop-out is one of those tabs in another window, so both halves must read
+ * one list or the pop-out renders blank (the regression this helper fixes).
+ * A scoped pop-out carries `scope=ide`; everything else reads the global key.
+ */
+export function previewTabsStorageKey(search: string): string {
+  let scoped = false
+
+  try {
+    const params = new URLSearchParams(search)
+
+    scoped = params.get('win') === 'ide' || params.get('scope') === 'ide'
+  } catch {
+    scoped = false
+  }
+
+  return scoped ? PREVIEW_TABS_IDE_KEY : PREVIEW_TABS_GLOBAL_KEY
+}
+
 // An "ide" window is the Hermes IDE: a dedicated full-size surface hosting the
 // explorer, the editor, the IDE-scoped chat column, and the shared in-app
 // browser. It is a specialized shell rather than a peer of the primary app, so
