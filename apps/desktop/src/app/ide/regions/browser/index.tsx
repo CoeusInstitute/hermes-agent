@@ -80,9 +80,7 @@ export function BrowserRegion() {
       aria-label={t.ide.browserTitle}
       className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-chat-surface-background)"
     >
-      <header
-        className="flex h-9 shrink-0 items-stretch gap-0.5 border-b border-(--ui-stroke-tertiary) px-1 pt-1"
-      >
+      <header className="flex h-9 shrink-0 items-stretch gap-0.5 border-b border-(--ui-stroke-tertiary) px-1 pt-1">
         {/* Tabs scroll inside their own region; the strip's controls sit right
             after them and stay visible while the tabs scroll. */}
         <div
@@ -91,84 +89,84 @@ export function BrowserRegion() {
           role="tablist"
         >
           {tabs.map(tab => {
-          const isActive = tab.id === active?.id
+            const isActive = tab.id === active?.id
 
-          return (
-            <div
-              aria-selected={isActive}
-              className={cn(
-                'group flex h-8 max-w-56 min-w-0 shrink-0 items-center gap-1.5 rounded-t-sm border border-b-0 border-transparent px-2 text-xs',
-                isActive
-                  ? 'border-(--ui-stroke-tertiary) bg-(--ui-bg-tertiary) text-foreground'
-                  : 'text-(--ui-text-secondary) hover:bg-(--ui-bg-quaternary)'
-              )}
-              key={tab.id}
-              role="tab"
-            >
-              <button
-                className="flex min-w-0 items-center gap-1.5"
-                onClick={() => selectRightRailTab(tab.id)}
-                type="button"
+            return (
+              <div
+                aria-selected={isActive}
+                className={cn(
+                  'group flex h-8 max-w-56 min-w-0 shrink-0 items-center gap-1.5 rounded-t-sm border border-b-0 border-transparent px-2 text-xs',
+                  isActive
+                    ? 'border-(--ui-stroke-tertiary) bg-(--ui-bg-tertiary) text-foreground'
+                    : 'text-(--ui-text-secondary) hover:bg-(--ui-bg-quaternary)'
+                )}
+                key={tab.id}
+                role="tab"
               >
-                <Codicon className="shrink-0 text-(--ui-text-tertiary)" name="globe" size={13} />
-                <span className="truncate">{tab.target.label}</span>
-              </button>
-              <Tip label={t.ide.closeTab}>
                 <button
-                  aria-label={t.ide.closeTabLabel(tab.target.label)}
-                  className="grid size-4 shrink-0 place-items-center rounded-sm text-(--ui-text-tertiary) opacity-0 group-hover:opacity-100 hover:bg-(--ui-bg-quaternary) hover:text-foreground"
-                  onClick={() => closeRightRailTab(tab.id)}
+                  className="flex min-w-0 items-center gap-1.5"
+                  onClick={() => selectRightRailTab(tab.id)}
                   type="button"
                 >
-                  <Codicon name="close" size={12} />
+                  <Codicon className="shrink-0 text-(--ui-text-tertiary)" name="globe" size={13} />
+                  <span className="truncate">{tab.target.label}</span>
                 </button>
-              </Tip>
-            </div>
-          )
-        })}
+                <Tip label={t.ide.closeTab}>
+                  <button
+                    aria-label={t.ide.closeTabLabel(tab.target.label)}
+                    className="grid size-4 shrink-0 place-items-center rounded-sm text-(--ui-text-tertiary) opacity-0 group-hover:opacity-100 hover:bg-(--ui-bg-quaternary) hover:text-foreground"
+                    onClick={() => closeRightRailTab(tab.id)}
+                    type="button"
+                  >
+                    <Codicon name="close" size={12} />
+                  </button>
+                </Tip>
+              </div>
+            )
+          })}
         </div>
         <span className="my-auto ml-1 flex shrink-0 items-center gap-0.5">
-        <Tip label={t.ide.browserNewTab}>
-          <Button
-            aria-label={t.ide.browserNewTab}
-            className="my-auto"
-            onClick={() => newBrowserTab()}
-            size="icon-xs"
-            type="button"
-            variant="ghost"
-          >
-            <Codicon name="add" size={13} />
-          </Button>
-        </Tip>
-        {active && (
-          <>
-            <Tip label={t.ide.browserInspect}>
-              <Button
-                aria-label={t.ide.browserInspect}
-                className="my-auto"
-                disabled={picking}
-                onClick={() => void inspectElement()}
-                size="icon-xs"
-                type="button"
-                variant="ghost"
-              >
-                <Codicon name="inspect" size={13} />
-              </Button>
-            </Tip>
-            <Tip label={t.ide.browserAddPage}>
-              <Button
-                aria-label={t.ide.browserAddPage}
-                className="my-auto"
-                onClick={() => addToChat(`Page: ${active.target.url}`)}
-                size="icon-xs"
-                type="button"
-                variant="ghost"
-              >
-                <Codicon name="link" size={13} />
-              </Button>
-            </Tip>
-          </>
-        )}
+          <Tip label={t.ide.browserNewTab}>
+            <Button
+              aria-label={t.ide.browserNewTab}
+              className="my-auto"
+              onClick={() => newBrowserTab()}
+              size="icon-xs"
+              type="button"
+              variant="ghost"
+            >
+              <Codicon name="add" size={13} />
+            </Button>
+          </Tip>
+          {active && (
+            <>
+              <Tip label={t.ide.browserInspect}>
+                <Button
+                  aria-label={t.ide.browserInspect}
+                  className="my-auto"
+                  disabled={picking}
+                  onClick={() => void inspectElement()}
+                  size="icon-xs"
+                  type="button"
+                  variant="ghost"
+                >
+                  <Codicon name="inspect" size={13} />
+                </Button>
+              </Tip>
+              <Tip label={t.ide.browserAddPage}>
+                <Button
+                  aria-label={t.ide.browserAddPage}
+                  className="my-auto"
+                  onClick={() => addToChat(`Page: ${active.target.url}`)}
+                  size="icon-xs"
+                  type="button"
+                  variant="ghost"
+                >
+                  <Codicon name="link" size={13} />
+                </Button>
+              </Tip>
+            </>
+          )}
         </span>
       </header>
       <div className="relative min-h-0 flex-1 overflow-hidden" ref={regionRef}>

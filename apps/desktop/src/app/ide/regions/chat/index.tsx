@@ -34,7 +34,8 @@ export function ChatRegion() {
   const [creating, setCreating] = useState(false)
   const [recent, setRecent] = useState<SessionInfo[]>([])
 
-  const effective = tabs.find(tile => tile.storedSessionId === active)?.storedSessionId ?? tabs[0]?.storedSessionId ?? null
+  const effective =
+    tabs.find(tile => tile.storedSessionId === active)?.storedSessionId ?? tabs[0]?.storedSessionId ?? null
 
   // Keep the pointer on a living tab (its tab was closed, or a profile swap
   // replaced the set).
@@ -89,13 +90,8 @@ export function ChatRegion() {
   }
 
   return (
-    <section
-      aria-label={t.ide.chatTitle}
-      className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-bg-chrome)"
-    >
-      <header
-        className="flex h-9 shrink-0 items-stretch gap-0.5 border-b border-(--ui-stroke-tertiary) px-1 pt-1"
-      >
+    <section aria-label={t.ide.chatTitle} className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-bg-chrome)">
+      <header className="flex h-9 shrink-0 items-stretch gap-0.5 border-b border-(--ui-stroke-tertiary) px-1 pt-1">
         {/* Tabs scroll inside their own region; the strip's controls sit right
             after them and stay visible while the tabs scroll. */}
         <div
@@ -104,57 +100,57 @@ export function ChatRegion() {
           role="tablist"
         >
           {tabs.map(tile => {
-          const row = tileStoredRow(tile.storedSessionId)
-          const title = row ? sessionTitle(row) : NEW_SESSION_TITLE
-          const isActive = tile.storedSessionId === effective
+            const row = tileStoredRow(tile.storedSessionId)
+            const title = row ? sessionTitle(row) : NEW_SESSION_TITLE
+            const isActive = tile.storedSessionId === effective
 
-          return (
-            <div
-              aria-selected={isActive}
-              className={cn(
-                'group flex h-8 max-w-56 min-w-0 shrink-0 items-center gap-1.5 rounded-t-sm border border-b-0 border-transparent px-2 text-xs',
-                isActive
-                  ? 'border-(--ui-stroke-tertiary) bg-(--ui-bg-tertiary) text-foreground'
-                  : 'text-(--ui-text-secondary) hover:bg-(--ui-bg-quaternary)'
-              )}
-              key={tile.storedSessionId}
-              role="tab"
-            >
-              <button
-                className="flex min-w-0 items-center gap-1.5"
-                onClick={() => activateIdeChat(tile.storedSessionId)}
-                type="button"
+            return (
+              <div
+                aria-selected={isActive}
+                className={cn(
+                  'group flex h-8 max-w-56 min-w-0 shrink-0 items-center gap-1.5 rounded-t-sm border border-b-0 border-transparent px-2 text-xs',
+                  isActive
+                    ? 'border-(--ui-stroke-tertiary) bg-(--ui-bg-tertiary) text-foreground'
+                    : 'text-(--ui-text-secondary) hover:bg-(--ui-bg-quaternary)'
+                )}
+                key={tile.storedSessionId}
+                role="tab"
               >
-                <span className="truncate">{title}</span>
-              </button>
-              <Tip label={t.ide.closeTab}>
                 <button
-                  aria-label={t.ide.closeTabLabel(title)}
-                  className="grid size-4 shrink-0 place-items-center rounded-sm text-(--ui-text-tertiary) opacity-0 group-hover:opacity-100 hover:bg-(--ui-bg-quaternary) hover:text-foreground"
-                  onClick={() => requestCloseSessionTile(tile.storedSessionId)}
+                  className="flex min-w-0 items-center gap-1.5"
+                  onClick={() => activateIdeChat(tile.storedSessionId)}
                   type="button"
                 >
-                  <Codicon name="close" size={12} />
+                  <span className="truncate">{title}</span>
                 </button>
-              </Tip>
-            </div>
-          )
-        })}
+                <Tip label={t.ide.closeTab}>
+                  <button
+                    aria-label={t.ide.closeTabLabel(title)}
+                    className="grid size-4 shrink-0 place-items-center rounded-sm text-(--ui-text-tertiary) opacity-0 group-hover:opacity-100 hover:bg-(--ui-bg-quaternary) hover:text-foreground"
+                    onClick={() => requestCloseSessionTile(tile.storedSessionId)}
+                    type="button"
+                  >
+                    <Codicon name="close" size={12} />
+                  </button>
+                </Tip>
+              </div>
+            )
+          })}
         </div>
         <span className="my-auto ml-1 flex shrink-0 items-center gap-0.5">
-        <Tip label={t.ide.chatNew}>
-          <Button
-            aria-label={t.ide.chatNew}
-            className="my-auto"
-            disabled={creating}
-            onClick={() => void startSession()}
-            size="icon-xs"
-            type="button"
-            variant="ghost"
-          >
-            {creating ? <Loader /> : <Codicon name="add" size={13} />}
-          </Button>
-        </Tip>
+          <Tip label={t.ide.chatNew}>
+            <Button
+              aria-label={t.ide.chatNew}
+              className="my-auto"
+              disabled={creating}
+              onClick={() => void startSession()}
+              size="icon-xs"
+              type="button"
+              variant="ghost"
+            >
+              {creating ? <Loader /> : <Codicon name="add" size={13} />}
+            </Button>
+          </Tip>
         </span>
       </header>
 

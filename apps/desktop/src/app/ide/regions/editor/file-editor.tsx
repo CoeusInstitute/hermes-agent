@@ -9,10 +9,7 @@ import { $workspaceChangeTick, notifyWorkspaceChanged } from '@/store/workspace-
 import { clearIdeFileDirty, setIdeFileDirty } from './tabs'
 
 type LoadState =
-  | { kind: 'error'; message: string }
-  | { kind: 'loading' }
-  | { kind: 'ready'; text: string }
-  | { kind: 'too-large' }
+  { kind: 'error'; message: string } | { kind: 'loading' } | { kind: 'ready'; text: string } | { kind: 'too-large' }
 
 interface IdeFileEditorProps {
   path: string

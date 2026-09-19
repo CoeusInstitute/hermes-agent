@@ -60,7 +60,11 @@ function decodeState(raw: string): IdeLayoutState {
       ),
       browserOpen: parsed.browserOpen !== false,
       chatOpen: parsed.chatOpen !== false,
-      chatWidth: clamp(finiteOr(parsed.chatWidth, IDE_LAYOUT_DEFAULTS.chatWidth), IDE_CHAT_MIN_WIDTH, IDE_CHAT_MAX_WIDTH),
+      chatWidth: clamp(
+        finiteOr(parsed.chatWidth, IDE_LAYOUT_DEFAULTS.chatWidth),
+        IDE_CHAT_MIN_WIDTH,
+        IDE_CHAT_MAX_WIDTH
+      ),
       explorerOpen: parsed.explorerOpen !== false,
       explorerWidth: clamp(
         finiteOr(parsed.explorerWidth, IDE_LAYOUT_DEFAULTS.explorerWidth),
