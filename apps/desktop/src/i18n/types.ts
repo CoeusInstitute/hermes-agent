@@ -434,21 +434,21 @@ export interface Translations {
     closeDirtyTitle: string
     closeDirtyBody: string
     closeDirtyConfirm: string
-    diskChangedTitle: string,
-    diskChangedBody: string,
-    overwrite: string,
-    chatTabsLabel: string,
-    chatNew: string,
-    chatRecent: string,
-    chatCreateFailed: string,
-    browserTabsLabel: string,
-    browserOpen: string,
-    browserNewTab: string,
-    browserInspect: string,
-    browserAddPage: string,
-    browserInspectFailed: string,
-    openFolder: string,
-    openFolderFailed: string,
+    diskChangedTitle: string
+    diskChangedBody: string
+    overwrite: string
+    chatTabsLabel: string
+    chatNew: string
+    chatRecent: string
+    chatCreateFailed: string
+    browserTabsLabel: string
+    browserOpen: string
+    browserNewTab: string
+    browserInspect: string
+    browserAddPage: string
+    browserInspectFailed: string
+    openFolder: string
+    openFolderFailed: string
   }
 
   keybinds: {

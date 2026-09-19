@@ -16,11 +16,7 @@ export const BROWSER_WINDOW_MIN_HEIGHT = 400
  */
 export function buildBrowserWindowUrl(
   tabId: null | string | undefined,
-  {
-    devServer,
-    rendererIndexPath,
-    scope
-  }: { devServer?: null | string; rendererIndexPath?: string; scope?: 'ide' } = {}
+  { devServer, rendererIndexPath, scope }: { devServer?: null | string; rendererIndexPath?: string; scope?: 'ide' } = {}
 ): string {
   const tab = typeof tabId === 'string' ? tabId.trim() : ''
   // `scope=ide` keeps the pop-out reading the same tab store as the window it

@@ -160,7 +160,8 @@ export const WIRE_REFERENCE_KINDS = [
  * a space — so the quoted forms are tried BEFORE bare `\S+`, or a quoted value
  * would end at the first space and strand the rest as prose.
  */
-const REFERENCE_PATTERN = /@(file|folder|url|image|tool|line|terminal|session|element):(`[^`\n]+`|"[^"\n]+"|'[^'\n]+'|\S+)/
+const REFERENCE_PATTERN =
+  /@(file|folder|url|image|tool|line|terminal|session|element):(`[^`\n]+`|"[^"\n]+"|'[^'\n]+'|\S+)/
 
 /**
  * A fresh matcher for every surface that has to find references in text: the

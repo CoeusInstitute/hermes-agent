@@ -122,7 +122,8 @@ function selectorLabel(selector: string) {
  * Whitespace carries no meaning in HTML, so nothing is lost.
  */
 export function pickedElementRef(picked: PickedElement, pageUrl: string): PickedElementRef {
-  const raw = picked.html.length > MAX_PICKED_HTML ? `${picked.html.slice(0, MAX_PICKED_HTML)} … (truncated)` : picked.html
+  const raw =
+    picked.html.length > MAX_PICKED_HTML ? `${picked.html.slice(0, MAX_PICKED_HTML)} … (truncated)` : picked.html
   const html = raw.replace(/\s+/g, ' ').replace(/`/g, 'ʹ')
   const selector = picked.selector.trim() || 'element'
   const label = selectorLabel(selector)

@@ -2,7 +2,12 @@ import { describe, expect, it } from 'vitest'
 
 import { SIDEBAR_EXCLUDED_SOURCES } from '@/app/session/hooks/use-session-list-actions'
 
-import { isMessagingSource, LOCAL_SESSION_SOURCE_IDS, MESSAGING_SESSION_SOURCE_IDS, sessionSourceSearchTerms } from './session-source'
+import {
+  isMessagingSource,
+  LOCAL_SESSION_SOURCE_IDS,
+  MESSAGING_SESSION_SOURCE_IDS,
+  sessionSourceSearchTerms
+} from './session-source'
 
 // Regression guard for #46761 / PR #47395: Photon (iMessage) must keep its own
 // sidebar section. refreshMessagingSessions() filters rows through

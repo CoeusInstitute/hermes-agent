@@ -4,7 +4,10 @@ import { MAX_PICKED_HTML, parsePickedPayload, pickedElementRef } from './inspect
 
 describe('pickedElementRef', () => {
   it('collapses the pick into a selector-labelled element reference', () => {
-    const ref = pickedElementRef({ html: '<button id="save">\n  Save\n</button>', selector: 'button#save' }, 'https://app.test/x')
+    const ref = pickedElementRef(
+      { html: '<button id="save">\n  Save\n</button>', selector: 'button#save' },
+      'https://app.test/x'
+    )
 
     expect(ref.kind).toBe('element')
     expect(ref.label).toBe('button#save')
@@ -12,19 +15,14 @@ describe('pickedElementRef', () => {
   })
 
   it('keeps the wire value on a single line and free of backticks', () => {
-    const ref = pickedElementRef(
-      { html: '<code>\n`x`\n</code>', selector: 'pre > code' },
-      'https://app.test'
-    )
+    const ref = pickedElementRef({ html: '<code>\n`x`\n</code>', selector: 'pre > code' }, 'https://app.test')
 
     expect(ref.value).not.toContain('\n')
     expect(ref.value).not.toContain('`')
   })
 
   it('truncates very large elements and long selectors', () => {
-    const ref = pickedElementRef(
-      { html: 'a'.repeat(MAX_PICKED_HTML + 50), selector: `div.${'x'.repeat(80)}` }
-    , '')
+    const ref = pickedElementRef({ html: 'a'.repeat(MAX_PICKED_HTML + 50), selector: `div.${'x'.repeat(80)}` }, '')
 
     expect(ref.value).toContain('… (truncated)')
     expect(ref.value.length).toBeLessThan(MAX_PICKED_HTML + 200)
@@ -32,7 +30,7 @@ describe('pickedElementRef', () => {
     expect(ref.label.endsWith('…')).toBe(true)
   })
 
-  it('labels the chip with the selector\'s last two segments', () => {
+  it("labels the chip with the selector's last two segments", () => {
     const ref = pickedElementRef(
       { html: '<path d="M0 0"/>', selector: 'div#sI1XGe > div:nth-of-type(1) > svg > path' },
       'https://www.google.com/'

@@ -81,7 +81,11 @@ export async function createIdeSession(requestGateway: IdeRequestGateway): Promi
   const connectionId = (route?.connectionId ?? $connection.get()?.connectionId ?? '').trim()
 
   const ownerRoute = connectionId
-    ? { connectionId, profile: route?.profile || profile, ...(route?.targetProfile ? { targetProfile: route.targetProfile } : {}) }
+    ? {
+        connectionId,
+        profile: route?.profile || profile,
+        ...(route?.targetProfile ? { targetProfile: route.targetProfile } : {})
+      }
     : undefined
 
   if (ownerRoute) {

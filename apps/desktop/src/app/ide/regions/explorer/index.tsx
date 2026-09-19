@@ -38,13 +38,7 @@ export function ExplorerRegion() {
           {workspaceRoot && name ? name : t.ide.explorerTitle}
         </span>
         <Tip label={t.ide.openFolder}>
-          <Button
-            aria-label={t.ide.openFolder}
-            onClick={chooseFolder}
-            size="icon-xs"
-            type="button"
-            variant="ghost"
-          >
+          <Button aria-label={t.ide.openFolder} onClick={chooseFolder} size="icon-xs" type="button" variant="ghost">
             <Codicon name="folder-opened" size={13} />
           </Button>
         </Tip>
@@ -65,7 +59,11 @@ export function ExplorerRegion() {
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {!workspaceRoot ? (
           <div className="flex h-full min-h-0 flex-col">
-            <EmptyState className="min-h-0 pt-10" description={t.ide.explorerEmptyBody} title={t.ide.explorerEmptyTitle} />
+            <EmptyState
+              className="min-h-0 pt-10"
+              description={t.ide.explorerEmptyBody}
+              title={t.ide.explorerEmptyTitle}
+            />
             <div className="flex shrink-0 justify-center pb-3">
               <Button onClick={chooseFolder} size="sm" variant="secondary">
                 {t.ide.openFolder}

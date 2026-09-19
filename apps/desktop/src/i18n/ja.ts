@@ -290,7 +290,7 @@ export const ja = defineLocale({
     openSettings: '設定を開く',
     openStarmap: 'メモリグラフを開く',
     resetHudLayout: 'HUD のサイズと位置をリセット',
-    openIde: 'Hermes IDEを開く',
+    openIde: 'Hermes IDEを開く'
   },
 
   language: {
@@ -500,7 +500,8 @@ export const ja = defineLocale({
       sessionDensityComfortable: '標準',
       sessionDensityDetailed: '詳細',
       tabStripTitle: 'タブバー',
-      tabStripDesc: 'ゾーンの上にタブを表示します。自動では、他にチャットやタイルのゾーンがない限り、ペインが1つのときに隠します。',
+      tabStripDesc:
+        'ゾーンの上にタブを表示します。自動では、他にチャットやタイルのゾーンがない限り、ペインが1つのときに隠します。',
       tabStripAuto: '自動',
       tabStripAlways: '常に表示',
       tabStripNever: '表示しない',
@@ -1427,8 +1428,7 @@ export const ja = defineLocale({
         selectedTitle: 'バックエンドを選択しました',
         selectedMessage: backend => `ターミナルコマンドは ${backend} で実行されます。新しいセッションに適用されます。`,
         failedSelect: backend => `${backend} の選択に失敗しました`,
-        needsSetupHint:
-          'このバックエンドは選択されていますが、セットアップが完了するまでコマンドは失敗します。',
+        needsSetupHint: 'このバックエンドは選択されていますが、セットアップが完了するまでコマンドは失敗します。',
         needsSetupConfirmTitle: backend => `それでも ${backend} を選択しますか？`,
         needsSetupConfirmDescription: detail =>
           `${detail} この変更後に開始されるセッションは、セットアップが完了するまでターミナルとファイルツールを使用できません。`,
@@ -3530,7 +3530,8 @@ export const ja = defineLocale({
     sudoTitle: '管理者パスワード',
     sudoDesc:
       'sudo パスワードを入力する前にコマンドを確認してください。パスワードは実行するエージェントに送信され、このセッション中キャッシュされます。',
-    sudoCommandUnavailable: 'エージェントからコマンドが提供されていません。会話で確認できない場合はキャンセルしてください。',
+    sudoCommandUnavailable:
+      'エージェントからコマンドが提供されていません。会話で確認できない場合はキャンセルしてください。',
     sudoPlaceholder: 'sudo パスワード',
     secretTitle: 'シークレットが必要です',
     secretDesc: 'Hermes は続行するための認証情報が必要です。',
@@ -3741,7 +3742,8 @@ export const ja = defineLocale({
     editorEmptyBody: 'エクスプローラーでファイルを選ぶと編集を開始できます。',
     chatTitle: 'チャット',
     chatEmptyTitle: 'IDEセッションはまだありません',
-    chatEmptyBody: 'IDEセッションはこのワークスペースに紐づき、ここに表示されます。エージェントと作業するには開始してください。',
+    chatEmptyBody:
+      'IDEセッションはこのワークスペースに紐づき、ここに表示されます。エージェントと作業するには開始してください。',
     browserTitle: 'ブラウザー',
     browserEmptyTitle: 'ページが開かれていません',
     browserEmptyBody: 'URLを開くとここで閲覧でき、エージェントが一緒に操作できます。',
@@ -3764,7 +3766,8 @@ export const ja = defineLocale({
     closeDirtyBody: 'このタブにはディスクに保存されていない編集があります。',
     closeDirtyConfirm: '変更を破棄',
     diskChangedTitle: 'ファイルがディスク上で変更されました',
-    diskChangedBody: 'エージェントの実行や別のアプリがこのファイルを編集しました。このまま保存するとその変更が上書きされます。',
+    diskChangedBody:
+      'エージェントの実行や別のアプリがこのファイルを編集しました。このまま保存するとその変更が上書きされます。',
     overwrite: '上書き',
     chatTabsLabel: 'IDEセッション',
     chatNew: '新しいIDEセッション',
@@ -3777,6 +3780,6 @@ export const ja = defineLocale({
     browserAddPage: 'ページをチャットに追加',
     browserInspectFailed: 'このページを検証できませんでした',
     openFolder: 'フォルダーを開く…',
-    openFolderFailed: 'このフォルダーを開けませんでした',
-  },
+    openFolderFailed: 'このフォルダーを開けませんでした'
+  }
 })

@@ -974,8 +974,7 @@ function createSecondary(profile: string, connectionId: null | string = null): S
     g.config?.onEvent(scopedEvent)
     releaseTerminalTurnLease(entry.scope, event)
   })
-  entry.offRequest =
-    gateway.onRequest?.(request => dispatchServerRequest(request, profile, connectionId)) ?? (() => {})
+  entry.offRequest = gateway.onRequest?.(request => dispatchServerRequest(request, profile, connectionId)) ?? (() => {})
   entry.offState = gateway.onState(state => {
     reportGatewayState(scope, state)
 
@@ -1888,7 +1887,9 @@ export async function ensureGatewayForProfile(profile: string): Promise<void> {
 // reconnects are owned by use-gateway-boot, so we only drive secondaries here.
 // A scope parked on a rejected session stays parked for automatic request
 // retries; only a user gesture (`explicit`: the Reconnect action) may redial it.
-export async function ensureActiveGatewayOpen({ explicit = false }: { explicit?: boolean } = {}): Promise<HermesGateway | null> {
+export async function ensureActiveGatewayOpen({
+  explicit = false
+}: { explicit?: boolean } = {}): Promise<HermesGateway | null> {
   if (g.activeKey === g.primaryProfile) {
     return g.primaryGateway
   }

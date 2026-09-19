@@ -50,10 +50,7 @@ export function IdeSplitHandle({ axis, invert, label, setSize, size }: IdeSplitH
     <div
       aria-label={label}
       aria-orientation={isX ? 'vertical' : 'horizontal'}
-      className={cn(
-        'group relative z-10 shrink-0 touch-none',
-        isX ? 'w-0 cursor-col-resize' : 'h-0 cursor-row-resize'
-      )}
+      className={cn('group relative z-10 shrink-0 touch-none', isX ? 'w-0 cursor-col-resize' : 'h-0 cursor-row-resize')}
       onPointerDown={onPointerDown}
       role="separator"
     >
