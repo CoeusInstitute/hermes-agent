@@ -405,6 +405,8 @@ export const en: Translations = {
     browserInspect: 'Inspect element',
     browserAddPage: 'Add page to chat',
     browserInspectFailed: 'Could not inspect this page',
+    openFolder: 'Open folder…',
+    openFolderFailed: 'Could not open that folder',
   },
 
   keybinds: {

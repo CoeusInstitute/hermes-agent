@@ -3697,5 +3697,7 @@ export const zhHant = defineLocale({
     browserInspect: '檢查元素',
     browserAddPage: '將頁面加入對話',
     browserInspectFailed: '無法檢查此頁面',
+    openFolder: '開啟資料夾…',
+    openFolderFailed: '無法開啟該資料夾',
   },
 })

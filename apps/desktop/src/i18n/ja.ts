@@ -3776,5 +3776,7 @@ export const ja = defineLocale({
     browserInspect: '要素を検証',
     browserAddPage: 'ページをチャットに追加',
     browserInspectFailed: 'このページを検証できませんでした',
+    openFolder: 'フォルダーを開く…',
+    openFolderFailed: 'このフォルダーを開けませんでした',
   },
 })

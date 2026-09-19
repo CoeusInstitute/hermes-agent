@@ -3983,5 +3983,7 @@ export const ru = defineLocale({
     browserInspect: 'Инспектировать элемент',
     browserAddPage: 'Добавить страницу в чат',
     browserInspectFailed: 'Не удалось проанализировать страницу',
+    openFolder: 'Открыть папку…',
+    openFolderFailed: 'Не удалось открыть папку',
   },
 })

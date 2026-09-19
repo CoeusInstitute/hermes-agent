@@ -4501,5 +4501,7 @@ export const zh = defineLocale({
     browserInspect: '检查元素',
     browserAddPage: '将页面添加到对话',
     browserInspectFailed: '无法检查此页面',
+    openFolder: '打开文件夹…',
+    openFolderFailed: '无法打开该文件夹',
   },
 })

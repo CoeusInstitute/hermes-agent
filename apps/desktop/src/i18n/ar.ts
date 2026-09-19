@@ -3357,5 +3357,7 @@ export const ar = defineLocale({
     browserInspect: 'فحص العنصر',
     browserAddPage: 'إضافة الصفحة إلى المحادثة',
     browserInspectFailed: 'تعذّر فحص هذه الصفحة',
+    openFolder: 'فتح مجلد…',
+    openFolderFailed: 'تعذّر فتح هذا المجلد',
   },
 })

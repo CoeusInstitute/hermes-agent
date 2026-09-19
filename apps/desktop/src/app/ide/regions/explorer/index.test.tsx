@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { I18nProvider } from '@/i18n'
@@ -33,7 +33,12 @@ vi.mock('@/app/right-sidebar/files/use-project-tree', () => ({
   useProjectTree: (cwd: string) => useProjectTreeMock(cwd)
 }))
 
+vi.mock('../../workspace', () => ({
+  openIdeFolder: vi.fn()
+}))
+
 import { setIdeWorkspaceRoot } from '../../state'
+import { openIdeFolder } from '../../workspace'
 
 import { ExplorerRegion } from './index'
 
@@ -47,6 +52,7 @@ function renderRegion() {
 
 beforeEach(() => {
   useProjectTreeMock.mockClear()
+  vi.mocked(openIdeFolder).mockReset()
   setIdeWorkspaceRoot(null)
 })
 
@@ -80,5 +86,22 @@ describe('ExplorerRegion', () => {
     renderRegion()
 
     expect(screen.getByText('Unable to read this folder (EACCES).')).toBeTruthy()
+  })
+
+  it('offers Open folder in the empty state', () => {
+    renderRegion()
+
+    fireEvent.click(screen.getByText('Open folder…'))
+
+    expect(vi.mocked(openIdeFolder)).toHaveBeenCalledWith('Could not open that folder')
+  })
+
+  it('keeps the Open folder affordance in the header with a workspace open', () => {
+    setIdeWorkspaceRoot('/repo')
+
+    renderRegion()
+    fireEvent.click(screen.getByLabelText('Open folder…'))
+
+    expect(vi.mocked(openIdeFolder)).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,14 +1,27 @@
-import { atom } from 'nanostores'
-
+import { type Codec, persistentAtom } from '@/lib/persisted'
 import { ideSeedCwd } from '@/store/windows'
 
+export const IDE_WORKSPACE_STORAGE_KEY = 'hermes.desktop.ideWorkspace.v1'
+
+const codec: Codec<null | string> = {
+  decode: raw => (raw && raw !== 'null' ? raw : null),
+  encode: value => (value === null ? null : value)
+}
+
+const seeded = ideSeedCwd()
+
 /**
- * The workspace root the IDE is showing. Seeded from the opener's cwd (the
- * window URL carries it) and kept in sync by the chat column as IDE sessions
- * come and go; the explorer rail and the status bar read it. Window-scoped:
+ * The workspace root the IDE is showing: the explorer rail, the status bar, and
+ * every new IDE session's cwd. The opener's seed wins on boot — the window URL
+ * carries the cwd the IDE was opened from — while a folder the user picked
+ * inside the IDE persists for boots that arrive without a seed. Window-scoped:
  * this atom lives only in the IDE renderer.
  */
-export const $ideWorkspaceRoot = atom<null | string>(ideSeedCwd())
+export const $ideWorkspaceRoot = persistentAtom<null | string>(IDE_WORKSPACE_STORAGE_KEY, seeded, codec)
+
+if (seeded && $ideWorkspaceRoot.get() !== seeded) {
+  $ideWorkspaceRoot.set(seeded)
+}
 
 export function setIdeWorkspaceRoot(root: null | string | undefined) {
   $ideWorkspaceRoot.set(root?.trim() || null)

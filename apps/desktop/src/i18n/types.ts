@@ -447,6 +447,8 @@ export interface Translations {
     browserInspect: string,
     browserAddPage: string,
     browserInspectFailed: string,
+    openFolder: string,
+    openFolderFailed: string,
   }
 
   keybinds: {
