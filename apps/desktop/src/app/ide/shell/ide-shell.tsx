@@ -8,6 +8,7 @@ import { Tip } from '@/components/ui/tooltip'
 import { useI18n } from '@/i18n'
 
 import { BrowserRegion, ChatRegion, EditorRegion, ExplorerRegion } from '../regions'
+import { $ideEditor } from '../regions/editor/tabs'
 import { $ideWorkspaceRoot, workspaceBasename } from '../state'
 
 import {
@@ -31,6 +32,7 @@ export function IdeShell() {
   const { t } = useI18n()
   const layout = useStore($ideLayout)
   const workspaceRoot = useStore($ideWorkspaceRoot)
+  const editor = useStore($ideEditor)
 
   return (
     <div
@@ -74,9 +76,14 @@ export function IdeShell() {
         )}
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-          <div className="flex min-h-0 min-w-0 flex-1">
-            <EditorRegion />
-          </div>
+          {/* The editor column exists only while a file is open: an empty
+              frame is dead weight above the browser, and closing the last tab
+              (or never opening one) should give its space back. */}
+          {editor.openPaths.length > 0 && (
+            <div className="flex min-h-0 min-w-0 flex-1">
+              <EditorRegion />
+            </div>
+          )}
 
           {layout.browserOpen && (
             <>

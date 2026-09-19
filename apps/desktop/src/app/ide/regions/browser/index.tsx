@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react'
 import { useCallback, useRef, useState } from 'react'
 
-import { requestComposerInsert } from '@/app/chat/composer/focus'
+import { requestComposerInsert, requestComposerInsertRefs } from '@/app/chat/composer/focus'
 import { PreviewTilePane } from '@/app/chat/right-rail/preview'
 import { Button } from '@/components/ui/button'
 import { Codicon } from '@/components/ui/codicon'
@@ -15,7 +15,7 @@ import { $previewTabs, closeRightRailTab, newBrowserTab, openBrowserTab } from '
 
 import { $ideActiveChat } from '../chat/store'
 
-import { formatPickedElement, parsePickedPayload, PICKER_SCRIPT } from './inspect'
+import { parsePickedPayload, pickedElementRef, PICKER_SCRIPT } from './inspect'
 
 interface WebviewLike extends HTMLElement {
   executeJavaScript?: (code: string) => Promise<unknown>
@@ -63,7 +63,10 @@ export function BrowserRegion() {
       const picked = parsePickedPayload(await webview.executeJavaScript(PICKER_SCRIPT))
 
       if (picked) {
-        addToChat(formatPickedElement(picked, active?.target.url ?? ''))
+        // The pick travels as a collapsed `@element:` chip (selector visible,
+        // HTML in the payload) rather than a code block dumped into the
+        // composer — same shape Cursor/VS Code attach a picked element in.
+        requestComposerInsertRefs([pickedElementRef(picked, active?.target.url ?? '')], { target: chatTarget() })
       }
     } catch (error) {
       notifyError(error, t.ide.browserInspectFailed)
@@ -91,7 +94,7 @@ export function BrowserRegion() {
               className={cn(
                 'group flex h-8 max-w-56 min-w-0 shrink-0 items-center gap-1.5 rounded-t-sm border border-b-0 border-transparent px-2 text-xs',
                 isActive
-                  ? 'border-(--ui-stroke-tertiary) bg-(--ui-chat-surface-background) text-foreground'
+                  ? 'border-(--ui-stroke-tertiary) bg-(--ui-bg-tertiary) text-foreground'
                   : 'text-(--ui-text-secondary) hover:bg-(--ui-bg-quaternary)'
               )}
               key={tab.id}

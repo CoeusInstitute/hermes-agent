@@ -31,7 +31,7 @@ export function ExplorerRegion() {
   return (
     <section
       aria-label={t.ide.explorerTitle}
-      className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-sidebar-surface-background)"
+      className="flex h-full min-h-0 w-full min-w-0 flex-col bg-(--ui-sidebar-surface-background) px-1.5"
     >
       <header className="flex h-8 shrink-0 items-center gap-1 pr-1 pl-3">
         <span className="min-w-0 flex-1 truncate text-[11px] font-medium tracking-wider text-(--ui-text-tertiary) uppercase">

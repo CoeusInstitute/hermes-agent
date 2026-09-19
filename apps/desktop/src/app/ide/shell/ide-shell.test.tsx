@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import { I18nProvider } from '@/i18n'
 
+import { $ideEditor, closeIdeFile, openIdeFile } from '../regions/editor/tabs'
 import { $ideWorkspaceRoot, setIdeWorkspaceRoot } from '../state'
 
 import { $ideLayout, IDE_LAYOUT_DEFAULTS } from './ide-layout'
@@ -27,21 +28,38 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  $ideEditor.set({ activePath: null, openPaths: [] })
   $ideWorkspaceRoot.set(null)
 })
 
 describe('IdeShell', () => {
-  it('renders the four regions with their honest empty states', () => {
+  it('renders the explorer, chat, and browser regions — and no empty editor column', () => {
     renderShell()
 
     expect(region('Explorer')).toBeTruthy()
-    expect(region('Editor')).toBeTruthy()
+    expect(region('Editor')).toBeNull()
     expect(region('Chat')).toBeTruthy()
     expect(region('Browser')).toBeTruthy()
     expect(screen.getByText('No workspace open')).toBeTruthy()
-    expect(screen.getByText('No file open')).toBeTruthy()
+    expect(screen.queryByText('No file open')).toBeNull()
     expect(screen.getByText('No IDE session yet')).toBeTruthy()
     expect(screen.getByText('No page open')).toBeTruthy()
+  })
+
+  it('brings the editor column in when a file opens and removes it when the last tab closes', () => {
+    openIdeFile('D:/scratch/hello.txt')
+    const view = renderShell()
+
+    expect(region('Editor')).toBeTruthy()
+
+    closeIdeFile('D:/scratch/hello.txt')
+    view.rerender(
+      <I18nProvider configClient={null} initialLocale="en">
+        <IdeShell />
+      </I18nProvider>
+    )
+
+    expect(region('Editor')).toBeNull()
   })
 
   it('shows the seeded workspace (basename) and keeps the full path in the status bar', () => {
@@ -63,6 +81,6 @@ describe('IdeShell', () => {
 
     expect(region('Explorer')).toBeNull()
     expect(screen.getByRole('button', { name: 'Toggle explorer' }).getAttribute('aria-pressed')).toBe('false')
-    expect(region('Editor')).toBeTruthy()
+    expect(region('Chat')).toBeTruthy()
   })
 })

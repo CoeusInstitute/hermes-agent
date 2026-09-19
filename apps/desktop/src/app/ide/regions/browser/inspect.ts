@@ -1,8 +1,8 @@
 // Element inspection for the IDE browser pane: an in-page picker that resolves
-// with the element under the first click (or null on Escape), plus the message
-// text handed to the chat. The script is injected into the guest page through
-// the <webview> and returns a JSON-safe payload — no host-side DOM access
-// needed, and nothing is exposed to the page itself.
+// with the element under the first click (or null on Escape), plus the inline
+// reference handed to the chat. The script is injected into the guest page
+// through the <webview> and returns a JSON-safe payload — no host-side DOM
+// access needed, and nothing is exposed to the page itself.
 
 export interface PickedElement {
   html: string
@@ -86,11 +86,33 @@ export const PICKER_SCRIPT = `new Promise(function (resolve) {
   document.documentElement.style.cursor = 'crosshair'
 })`
 
-/** The composer text an inspected element contributes. */
-export function formatPickedElement(picked: PickedElement, pageUrl: string): string {
-  const html = picked.html.length > MAX_PICKED_HTML ? `${picked.html.slice(0, MAX_PICKED_HTML)}\n… (truncated)` : picked.html
+export interface PickedElementRef {
+  kind: 'element'
+  label: string
+  value: string
+}
 
-  return `Element from ${pageUrl}\n\nSelector: ${picked.selector}\n\n\`\`\`html\n${html}\n\`\`\``
+const MAX_LABEL = 60
+
+/**
+ * The inline reference an inspected element contributes to the composer: a
+ * collapsed `@element:` chip. The label is the selector — what the user needs
+ * to recognize the pick — while the value carries `selector :: page :: html`.
+ *
+ * The value is whitespace-collapsed to a single line and backticks are
+ * neutralized: the composer's wire form quotes the value inline, and a
+ * newline or a nested backtick would end the reference early and strand the
+ * rest as prose (in the chip, the sent bubble, and the transcript alike).
+ * Whitespace carries no meaning in HTML, so nothing is lost.
+ */
+export function pickedElementRef(picked: PickedElement, pageUrl: string): PickedElementRef {
+  const raw = picked.html.length > MAX_PICKED_HTML ? `${picked.html.slice(0, MAX_PICKED_HTML)} … (truncated)` : picked.html
+  const html = raw.replace(/\s+/g, ' ').replace(/`/g, 'ʹ')
+  const selector = picked.selector.trim() || 'element'
+  const label = selector.length > MAX_LABEL ? `${selector.slice(0, MAX_LABEL - 3)}…` : selector
+  const value = [selector, pageUrl.trim(), html].filter(Boolean).join(' :: ')
+
+  return { kind: 'element', label, value }
 }
 
 /** Validate the guest page's return value before trusting it. */

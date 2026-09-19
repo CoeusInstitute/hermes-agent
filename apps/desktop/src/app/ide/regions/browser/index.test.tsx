@@ -8,6 +8,7 @@ import type * as PreviewStoreModule from '@/store/preview'
 const h = vi.hoisted(() => ({
   closeTab: vi.fn(),
   insert: vi.fn(),
+  insertRefs: vi.fn(),
   newTab: vi.fn(),
   openBrowser: vi.fn()
 }))
@@ -22,7 +23,8 @@ vi.mock('@/app/chat/right-rail/preview', () => ({
 }))
 
 vi.mock('@/app/chat/composer/focus', () => ({
-  requestComposerInsert: (...args: unknown[]) => h.insert(...args)
+  requestComposerInsert: (...args: unknown[]) => h.insert(...args),
+  requestComposerInsertRefs: (...args: unknown[]) => h.insertRefs(...args)
 }))
 
 vi.mock('@/store/preview', async importOriginal => {
@@ -60,6 +62,7 @@ beforeEach(() => {
   window.localStorage.clear()
   h.closeTab.mockReset()
   h.insert.mockReset()
+  h.insertRefs.mockReset()
   h.newTab.mockReset()
   h.openBrowser.mockReset()
   $previewTabs.set([])
@@ -95,7 +98,7 @@ describe('BrowserRegion', () => {
     expect(h.insert).toHaveBeenCalledWith('Page: https://example.com', { mode: 'block', target: 'tile:s1' })
   })
 
-  it('picks an element through the webview and hands it to the chat', async () => {
+  it('picks an element through the webview and hands the chat a collapsed chip', async () => {
     $previewTabs.set([exampleTab as never])
     $rightRailActiveTabId.set('url:1' as never)
     $ideActiveChat.set('s2')
@@ -112,13 +115,19 @@ describe('BrowserRegion', () => {
     fireEvent.click(screen.getByLabelText('Inspect element'))
 
     await waitFor(() => expect(execute).toHaveBeenCalledTimes(1))
-    await waitFor(() => expect(h.insert).toHaveBeenCalledTimes(1))
+    await waitFor(() => expect(h.insertRefs).toHaveBeenCalledTimes(1))
 
-    const [text, options] = h.insert.mock.calls[0] as [string, { mode: string; target: string }]
+    const [refs, options] = h.insertRefs.mock.calls[0] as [
+      Array<{ kind: string; label: string; value: string }>,
+      { target: string }
+    ]
 
-    expect(text).toContain('Selector: a:nth-of-type(1)')
-    expect(text).toContain('<a href="/x">X</a>')
-    expect(options).toEqual({ mode: 'block', target: 'tile:s2' })
+    expect(refs).toHaveLength(1)
+    expect(refs[0]?.kind).toBe('element')
+    expect(refs[0]?.label).toBe('a:nth-of-type(1)')
+    expect(refs[0]?.value).toContain('<a href="/x">X</a>')
+    expect(h.insert).not.toHaveBeenCalled()
+    expect(options).toEqual({ target: 'tile:s2' })
   })
 
   it('closes a tab through the preview store', () => {

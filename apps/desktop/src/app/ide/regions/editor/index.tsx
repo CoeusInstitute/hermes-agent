@@ -60,7 +60,7 @@ export function EditorRegion() {
                 className={cn(
                   'group flex h-8 max-w-56 min-w-0 shrink-0 items-center gap-1.5 rounded-t-sm border border-b-0 border-transparent px-2 text-xs',
                   active
-                    ? 'border-(--ui-stroke-tertiary) bg-(--ui-chat-surface-background) text-foreground'
+                    ? 'border-(--ui-stroke-tertiary) bg-(--ui-bg-tertiary) text-foreground'
                     : 'text-(--ui-text-secondary) hover:bg-(--ui-bg-quaternary)'
                 )}
                 key={path}
